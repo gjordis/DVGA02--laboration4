@@ -5,13 +5,19 @@
 
 package BrekoutGame;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.*;
 
+import javax.swing.BoxLayout;
+import javax.swing.GroupLayout;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class Game {
 
@@ -22,7 +28,8 @@ public class Game {
 	private ArrayList<Ball> ball = new ArrayList<Ball>();
 	private ScoreBoard scoreBoard;
 	private int tickCount = 0;
-	 private boolean highScoreDialogShown = false;
+	private boolean highScoreDialogShown = false;
+	
 	
 	private HighScore highScore;
 	private LatestRuns latestRuns;
@@ -31,23 +38,34 @@ public class Game {
 		this.board = board;
 		brickCollection = new BrickCollection(Const.BRICKCOLLECTION_START_X, Const.BRICKCOLLECTION_START_Y,
 				Const.BRICKCOLLECTION_WIDTH, Const.BRICKCOLLECTION_HEIGHT, Const.BRICKCOLLECTION_SPACING,
-				board.getPreferredSize().width);
-		paddle = new Paddle(board.getPreferredSize().width / 2 - 75, board.getPreferredSize().height - 25,
+				Const.GAMEAREA_WIDTH);
+		paddle = new Paddle(Const.GAMEAREA_WIDTH / 2 - Const.PADDLE_WIDTH / 2, Const.GAMEAREA_HEIGHT - Const.PADDLE_HEIGHT - 2,
 				Const.PADDLE_WIDTH, Const.PADDLE_HEIGHT, Const.PADDLE_NAME);
 		ball.add(new Ball(Const.DEFAULT_VALUE, Const.DEFAULT_VALUE, Const.BALL_DIAMETER, Const.BALL_SPEED_X,
 				Const.BALL_SPEED_Y, true));
 		scoreBoard = new ScoreBoard(1, 1, 1, 1, brickCollection, board, this);
 		gameStateManager = new GameStateManager(this);
 		
+		/* Skapar en panel för score och lägger in instanser av 
+		 * HighScore & LatestRuns
+		 * ingen snygg lösning men fungerar.. */
+		JPanel HighScorePanel = new JPanel();
+		JPanel filler = new JPanel();
+		filler.setPreferredSize(new Dimension(200,300));
+		filler.setOpaque(false);
+		
+		HighScorePanel.setLayout(new BoxLayout(HighScorePanel, BoxLayout.Y_AXIS));
+		HighScorePanel.setBackground(new Color(100, 100, 100, 50));
+		
 		highScore = new HighScore();
 		latestRuns = new LatestRuns();
+		board.add(HighScorePanel, BorderLayout.EAST);
+		HighScorePanel.add(highScore);
+		HighScorePanel.add(latestRuns);
+		HighScorePanel.add(filler);
 		
-		board.add(highScore);
-		board.add(latestRuns);
 		
-		
-		//highScore = new HighScore();
-		//latestRuns = new LatestRuns();
+	
 	}
 
 	public void update(Keyboard keyboard) {
@@ -60,7 +78,7 @@ public class Game {
 			return;
 
 		paddle.move(keyboard);
-		paddle.isInsideWindow(board.getWidth());
+		paddle.isInsideWindow(Const.GAMEAREA_WIDTH);
 
 		gameStateManager.manageWinLoss(keyboard);
 
@@ -75,8 +93,14 @@ public class Game {
 		/* Inga bollar kvar på planen */
 		else if (ball.isEmpty()) {
 			scoreBoard.reduceBallsLeft();
-			if (scoreBoard.getBallsLeft() <= 0)
+			if (scoreBoard.getBallsLeft() <= 0 && gameStateManager.getState() != State.GAMEOVER) {
+				latestRuns.addNewScore(brickCollection.getScore());
+				System.out.println("test");
 				gameStateManager.setState(State.GAMEOVER);
+				return;
+				
+				
+			}
 			else
 				ball.add(new Ball(Const.DEFAULT_VALUE, Const.DEFAULT_VALUE, Const.BALL_DIAMETER, Const.BALL_SPEED_X,
 						Const.BALL_SPEED_Y, true));
@@ -88,7 +112,7 @@ public class Game {
 	public void draw(Graphics2D graphics) {
 		//highScore.draw(graphics);
 		//latestRuns.draw(graphics);
-		
+		graphics.drawLine(1200, 0, 1200, 800); // !!temporär linje under highscore!!
 		scoreBoard.draw(graphics);
 		brickCollection.draw(graphics);
 		paddle.draw(graphics);
@@ -125,7 +149,7 @@ public class Game {
 		ball.clear();
 		this.brickCollection = new BrickCollection(Const.BRICKCOLLECTION_START_X, Const.BRICKCOLLECTION_START_Y,
 				Const.BRICKCOLLECTION_WIDTH, Const.BRICKCOLLECTION_HEIGHT, Const.BRICKCOLLECTION_SPACING,
-				board.getPreferredSize().width);
+				Const.GAMEAREA_WIDTH);
 		// skickar med den nya kollektionen till scoreboard för att kunna räkna poäng
 		scoreBoard.countScoreOn(brickCollection);
 		gameStateManager.setState(State.RUNNING);
@@ -146,11 +170,11 @@ public class Game {
 			Ball b = iterator.next();
 			b.update(keyboard);
 			b.initiationPosition(paddle);
-			b.hitWall(board.getWidth(), board.getHeight());
+			b.hitWall(Const.GAMEAREA_WIDTH, board.getHeight());
 
 			/* boll träffar paddel */
 			if (b.getBounds().intersects(paddle.getBounds()))
-				b.hitPaddle(board.getWidth(), board.getHeight(), paddle);
+				b.hitPaddle(Const.GAMEAREA_WIDTH, board.getHeight(), paddle);
 
 			/* Släpper bollen från paddel */
 			if (keyboard.isKeyDown(Key.Space) && b.getStartPosition())
@@ -187,14 +211,17 @@ public class Game {
 	}
 	
 	public void registerHighScore() {
-		/* --------------- IN progress ----------------- Denna skall ändras/flyttas, konstig beteenede vid omstart */
+		/* --------------- IN progress -----------------  */
 		if(!highScoreDialogShown && highScore.isHighScore(brickCollection.getScore())) {
 			String initials = JOptionPane.showInputDialog(board, 
 	                "Grattis! Du har uppnått en highscore. Ange dina initialer (max 3 tecken):", 
 	                "Ny Highscore", 
 	                JOptionPane.INFORMATION_MESSAGE);
 	            if (initials != null && initials.length() <= 3) {
-	                highScore.addNewScore(initials.toUpperCase(), brickCollection.getScore());
+	                //highScore.addNewScore(initials.toUpperCase(), brickCollection.getScore());
+	            	highScore.addNewScore(initials.toUpperCase(), brickCollection.getScore());
+	            	latestRuns.addNewScore(brickCollection.getScore());
+	            	
 	            }
 	            highScoreDialogShown = true;
 	        }

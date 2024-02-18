@@ -17,7 +17,7 @@ public class GameBoard extends JComponent {
 		
 		/* ändrar till FlowLayout på spelplanen för att lägga till HighScore & LatestRuns
 		 * dessa läggs till i Game klassen då denna har tillgång till all information om poäng */
-		this.setLayout(new FlowLayout());
+		this.setLayout(new BorderLayout());
 		
 		keyboard = new Keyboard();
 		game = new Game(this);
@@ -34,7 +34,7 @@ public class GameBoard extends JComponent {
 
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(1200, 800);
+		return new Dimension(1400, 800);
 	}
 
 	@Override
