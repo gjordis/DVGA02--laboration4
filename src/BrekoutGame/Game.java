@@ -55,7 +55,7 @@ public class Game {
 		filler.setOpaque(false);
 		
 		HighScorePanel.setLayout(new BoxLayout(HighScorePanel, BoxLayout.Y_AXIS));
-		HighScorePanel.setBackground(new Color(100, 100, 100, 50));
+		HighScorePanel.setBackground(new Color(0, 0, 0, 50));
 		
 		highScore = new HighScore();
 		latestRuns = new LatestRuns();
@@ -110,9 +110,7 @@ public class Game {
 	}
 
 	public void draw(Graphics2D graphics) {
-		//highScore.draw(graphics);
-		//latestRuns.draw(graphics);
-		graphics.drawLine(1200, 0, 1200, 800); // !!temporär linje under highscore!!
+		
 		scoreBoard.draw(graphics);
 		brickCollection.draw(graphics);
 		paddle.draw(graphics);
@@ -123,7 +121,7 @@ public class Game {
 		if (gameStateManager.getState() == State.PAUSED) {
 			graphics.setColor(Color.CYAN.brighter());
 			graphics.setFont(new Font("Arial", Font.ITALIC, Const.SCOREBOARD_FONTSIZE_LARGE));
-			int textWidth = board.getWidth() / 2 - graphics.getFontMetrics().stringWidth("PAUSED") / 2;
+			int textWidth = Const.GAMEAREA_WIDTH / 2 - graphics.getFontMetrics().stringWidth("PAUSED") / 2;
 			graphics.drawString("PAUSED", textWidth, board.getHeight() / 3 + 80);
 		}
 	}

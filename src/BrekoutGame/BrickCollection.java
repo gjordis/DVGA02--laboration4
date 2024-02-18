@@ -19,7 +19,7 @@ public class BrickCollection {
 		bricks = new ArrayList<>();
 		int currentX = x;
 		int currentY = y;
-		int maxRows = 5;
+		int maxRows = 1;
 		int invincibleBrickCount = 0;
 		Random random = new Random();
 		/* Skapar bricks, randomiserar vilka bricks som skapas 
@@ -31,13 +31,13 @@ public class BrickCollection {
 			
 			switch (brickType) {
 			case 0:
-				bricks.add(new MagentaBrick(currentX, currentY, width, height));
+				//bricks.add(new MagentaBrick(currentX, currentY, width, height));
 				break;
 			case 1:
-				bricks.add(new DarkGrayBrick(currentX, currentY, width, height));
+				//bricks.add(new DarkGrayBrick(currentX, currentY, width, height));
 				break;
 			case 2:
-				bricks.add(new PinkBrick(currentX, currentY, width, height));
+				//bricks.add(new PinkBrick(currentX, currentY, width, height));
 				break;
 			case 3:
 				bricks.add(new CyanBrick(currentX, currentY, width, height));

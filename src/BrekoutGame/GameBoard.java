@@ -46,6 +46,9 @@ public class GameBoard extends JComponent {
 		
 		/* tillägg för bakgrundsbild */
 		graphics.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+		graphics.setColor(Color.BLACK);
+		/* Linje för att separera gamearea och highscore-bar */
+		graphics.drawLine(Const.GAMEAREA_WIDTH, 0, Const.GAMEAREA_WIDTH, Const.GAMEAREA_HEIGHT);
 		
 		game.draw(graphics);
 	}

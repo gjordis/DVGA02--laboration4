@@ -62,7 +62,7 @@ public class LatestRuns extends JPanel{
 		JList<String> listNrs = new JList<>(listModel);
 		listNrs.setFont(new Font("Arial", Font.BOLD, 18));
 		listNrs.setForeground(new Color(255,255,255,100));
-		listNrs.setBackground(new Color(0,0,0,100));
+		listNrs.setBackground(new Color(0,0,0,0));
 		// Inaktivera interaktion med JList
 		listNrs.setEnabled(false);
 		listNrs.setFocusable(false);
@@ -70,7 +70,7 @@ public class LatestRuns extends JPanel{
 		// JList som används för att visa upp highScoreModelLatest3
 		JList<PlayerScore> latestScores = new JList<>(highScoreModelLatest3);
 		latestScores.setFont(new Font("Arial", Font.BOLD, 18));
-		latestScores.setBackground(new Color(0,0,0,100));
+		latestScores.setBackground(new Color(0,0,0,0));
 		
 		latestScore.add(listNrs);
 		latestScore.add(latestScores);
