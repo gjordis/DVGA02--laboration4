@@ -22,7 +22,6 @@ public class GameBoard extends JComponent {
 		keyboard = new Keyboard();
 		game = new Game(this);
 		
-	
 		
 		/* tillägg för bakgrundsbild
 		 * Hämtat från: https://wallpapergod.com/synthwave */

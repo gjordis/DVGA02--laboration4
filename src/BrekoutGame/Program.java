@@ -15,8 +15,7 @@ public class Program extends JFrame {
 	
 	public Program() {
 		
-		setLayout(new BorderLayout());
-		
+		this.setTitle("Neon Bounce");
 		board = new GameBoard();
 		add(board);
 		setResizable(true);
