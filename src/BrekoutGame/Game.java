@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.util.*;
 
@@ -29,8 +30,7 @@ public class Game {
 	private ScoreBoard scoreBoard;
 	private int tickCount = 0;
 	private boolean highScoreDialogShown = false;
-	
-	
+
 	private HighScore highScore;
 	private LatestRuns latestRuns;
 
@@ -39,37 +39,37 @@ public class Game {
 		brickCollection = new BrickCollection(Const.BRICKCOLLECTION_START_X, Const.BRICKCOLLECTION_START_Y,
 				Const.BRICKCOLLECTION_WIDTH, Const.BRICKCOLLECTION_HEIGHT, Const.BRICKCOLLECTION_SPACING,
 				Const.GAMEAREA_WIDTH);
-		paddle = new Paddle(Const.GAMEAREA_WIDTH / 2 - Const.PADDLE_WIDTH / 2, Const.GAMEAREA_HEIGHT - Const.PADDLE_HEIGHT - 2,
-				Const.PADDLE_WIDTH, Const.PADDLE_HEIGHT, Const.PADDLE_NAME);
+		paddle = new Paddle(Const.GAMEAREA_WIDTH / 2 - Const.PADDLE_WIDTH / 2,
+				Const.GAMEAREA_HEIGHT - Const.PADDLE_HEIGHT - 2, Const.PADDLE_WIDTH, Const.PADDLE_HEIGHT,
+				Const.PADDLE_NAME);
 		ball.add(new Ball(Const.DEFAULT_VALUE, Const.DEFAULT_VALUE, Const.BALL_DIAMETER, Const.BALL_SPEED_X,
 				Const.BALL_SPEED_Y, true));
 		scoreBoard = new ScoreBoard(1, 1, 1, 1, brickCollection, board, this);
 		gameStateManager = new GameStateManager(this);
-		
-		/* Skapar en panel för score och lägger in instanser av 
-		 * HighScore & LatestRuns
-		 * ingen snygg lösning men fungerar.. */
+
+		/*
+		 * Skapar en panel för score och lägger in instanser av HighScore & LatestRuns
+		 * ingen snygg lösning men fungerar..
+		 */
 		JPanel HighScorePanel = new JPanel();
 		JPanel filler = new JPanel();
-		filler.setPreferredSize(new Dimension(200,300));
+		filler.setPreferredSize(new Dimension(200, 300));
 		filler.setOpaque(false);
-		
+
 		HighScorePanel.setLayout(new BoxLayout(HighScorePanel, BoxLayout.Y_AXIS));
 		HighScorePanel.setBackground(new Color(0, 0, 0, 50));
-		
+
 		highScore = new HighScore();
 		latestRuns = new LatestRuns();
 		board.add(HighScorePanel, BorderLayout.EAST);
 		HighScorePanel.add(highScore);
 		HighScorePanel.add(latestRuns);
 		HighScorePanel.add(filler);
-		
-		
-	
+
 	}
 
 	public void update(Keyboard keyboard) {
-		
+
 		tickCount++;
 
 		/* hanterar paus */
@@ -97,8 +97,7 @@ public class Game {
 				latestRuns.pushNewScore(brickCollection.getScore());
 				gameStateManager.setState(State.GAMEOVER);
 				return;
-			}
-			else
+			} else
 				ball.add(new Ball(Const.DEFAULT_VALUE, Const.DEFAULT_VALUE, Const.BALL_DIAMETER, Const.BALL_SPEED_X,
 						Const.BALL_SPEED_Y, true));
 
@@ -107,7 +106,7 @@ public class Game {
 	}
 
 	public void draw(Graphics2D graphics) {
-		
+
 		scoreBoard.draw(graphics);
 		brickCollection.draw(graphics);
 		paddle.draw(graphics);
@@ -117,9 +116,9 @@ public class Game {
 
 		if (gameStateManager.getState() == State.PAUSED) {
 			graphics.setColor(Color.CYAN.brighter());
-			graphics.setFont(new Font("Arial", Font.ITALIC, Const.SCOREBOARD_FONTSIZE_LARGE));
+			graphics.setFont(new Font("Lucida Console", Font.ITALIC, Const.SCOREBOARD_FONTSIZE_LARGE * 2));
 			int textWidth = Const.GAMEAREA_WIDTH / 2 - graphics.getFontMetrics().stringWidth("PAUSED") / 2;
-			graphics.drawString("PAUSED", textWidth, board.getHeight() / 3 + 80);
+			graphics.drawString("PAUSED", textWidth, board.getHeight() / 2 + 80);
 		}
 	}
 
@@ -138,7 +137,7 @@ public class Game {
 	}
 
 	public void restartGame() {
-		
+
 		scoreBoard.resetBallsLeft();
 		brickCollection.resetScoreCount();
 		ball.clear();
@@ -150,7 +149,7 @@ public class Game {
 		gameStateManager.setState(State.RUNNING);
 		highScoreDialogShown = false;
 		System.out.println("restart");
-		
+
 	}
 
 	public void manageBallBrickLogics(Keyboard keyboard) {
@@ -204,22 +203,43 @@ public class Game {
 		/* Lägger till objekt som adderats från powerups */
 		ball.addAll(newBalls);
 	}
-	
+
+	/* Visar upp en messagedialog, ber om specifik inmatning &
+	 * hanterar felaktiga inmatningar.
+	 * Anropar highScore med inmatad sträng & antalet poäng,
+	 * anropar latestScore med antalet poäng. */
 	public void registerHighScore() {
-		/* --------------- IN progress -----------------  */
-		if(!highScoreDialogShown && highScore.isHighScore(brickCollection.getScore())) {
-			String initials = JOptionPane.showInputDialog(board, 
-	                "Grattis! Du har uppnått en highscore. Ange dina initialer (max 3 tecken):", 
-	                "Ny Highscore", 
-	                JOptionPane.INFORMATION_MESSAGE);
-	            if (initials != null && initials.length() <= 3) {
-	                //highScore.addNewScore(initials.toUpperCase(), brickCollection.getScore());
-	            	highScore.pushNewScore(initials.toUpperCase(), brickCollection.getScore());
-	            	latestRuns.pushNewScore(brickCollection.getScore());
-	            	
+
+		if (!highScoreDialogShown && highScore.isHighScore(brickCollection.getScore())) {
+	        String initials = "";
+	        boolean validInitials = false;
+	        while (!validInitials) {
+	            initials = JOptionPane.showInputDialog(board,
+	                    "Grattis! Du har uppnått en highscore. Ange dina initialer (max 3 tecken):", "Ny Highscore",
+	                    JOptionPane.INFORMATION_MESSAGE);
+	            if (initials != null) {
+	                if (initials.length() > 3) {
+	                    JOptionPane.showMessageDialog(board, "Du angav för många initialer, vänligen ange max 3 tecken.",
+	                            "Felaktig inmatning", JOptionPane.ERROR_MESSAGE);
+	                } else if (initials.trim().isEmpty()) {
+	                    JOptionPane.showMessageDialog(board, "Du angav inga initialer, vänligen försök igen.",
+	                            "Felaktig inmatning", JOptionPane.ERROR_MESSAGE);
+	                } else if (!initials.matches("[a-zA-Z]+")) {
+	                    JOptionPane.showMessageDialog(board, "Du angav felaktiga initialer, vänligen försök igen.",
+	                            "Felaktig inmatning", JOptionPane.ERROR_MESSAGE);
+	                }else {
+	                    validInitials = true;
+	                }
+	            } else {
+	                // Användaren valde att avbryta dialogen
+	                return;
 	            }
-	            highScoreDialogShown = true;
 	        }
+	        highScore.pushNewScore(initials.toUpperCase(), brickCollection.getScore());
+	        latestRuns.pushNewScore(brickCollection.getScore());
+	        highScoreDialogShown = true;
+	    }
+
 	}
 
 	public int getTickCount() {
@@ -229,10 +249,9 @@ public class Game {
 	public void resetTickCount() {
 		tickCount = 0;
 	}
-	
+
 	public State getState() {
 		return gameStateManager.getState();
 	}
-	
 
 }

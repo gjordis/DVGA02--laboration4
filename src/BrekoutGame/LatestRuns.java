@@ -32,7 +32,7 @@ public class LatestRuns extends JPanel{
 		JPanel titlePanel = new JPanel();
 		titlePanel.setOpaque(false);
 		title = new JLabel("LATEST:");
-		Font font = new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_MEDIUM);
+		Font font = new Font("Lucida Console", Font.BOLD, Const.HIGHSCORE_FONTSIZE_MEDIUM);
 		title.setFont(font);
 		title.setForeground(Color.CYAN); // Sätt textfärg
 		titlePanel.add(title); // Lägg till titelpanelen i toppen av panelen
@@ -61,7 +61,7 @@ public class LatestRuns extends JPanel{
 		}
 		
 		JList<String> listNrs = new JList<>(listModel);
-		listNrs.setFont(new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
+		listNrs.setFont(new Font("Lucida Console", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		listNrs.setForeground(new Color(255,255,255,100));
 		listNrs.setBackground(new Color(0,0,0,0));
 		// Inaktivera interaktion med JList
@@ -70,7 +70,7 @@ public class LatestRuns extends JPanel{
 		
 		// JList som används för att visa upp highScoreModelLatest3
 		JList<PlayerScore> latestScores = new JList<>(highScoreModelLatest3);
-		latestScores.setFont(new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
+		latestScores.setFont(new Font("Lucida Console", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		latestScores.setBackground(new Color(0,0,0,0));
 		
 		latestScore.add(listNrs);

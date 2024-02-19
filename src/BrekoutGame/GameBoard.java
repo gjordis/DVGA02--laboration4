@@ -26,7 +26,7 @@ public class GameBoard extends JComponent {
 		
 		/* tillägg för bakgrundsbild
 		 * Hämtat från: https://wallpapergod.com/synthwave */
-		backgroundImage = Toolkit.getDefaultToolkit().createImage("BreakoutBackground.jpeg");
+		backgroundImage = Toolkit.getDefaultToolkit().createImage("img/BreakoutBackground.jpeg");
 		
 
 	}

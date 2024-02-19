@@ -35,7 +35,7 @@ public class ScoreBoard extends Sprite {
 		 * som visar antalet poäng */
 		if (ballsLeft > 0 && game.getState() != State.VICTORY) {
 			graphics.setColor(Color.CYAN.darker());
-			graphics.setFont(new Font("Arial", Font.BOLD, 40));
+			graphics.setFont(new Font("Lucida Console", Font.BOLD, 40));
 			String score = String.valueOf(brickScore.getScore());
 			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y);
 			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y -10, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y -10);
@@ -66,7 +66,7 @@ public class ScoreBoard extends Sprite {
 			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y +70, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y +70);
 			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y +80, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y +80);
 			
-			graphics.setFont(new Font("Arial", Font.BOLD, Const.SCOREBOARD_FONTSIZE_MEDIUM));
+			graphics.setFont(new Font("Lucida Console", Font.BOLD, Const.SCOREBOARD_FONTSIZE_MEDIUM));
 			
 			int textWidth = Const.GAMEAREA_WIDTH /2  - graphics.getFontMetrics().stringWidth("Game Over") / 2;
 			int textHeight = graphics.getFontMetrics().getHeight();
@@ -74,7 +74,7 @@ public class ScoreBoard extends Sprite {
 			int textY = board.getHeight() /2 + 110 - textHeight + graphics.getFontMetrics().getAscent();
 			
 			graphics.drawString("Game Over", textWidth, textY);
-			graphics.setFont(new Font("Arial", Font.ITALIC, Const.SCOREBOARD_FONTSIZE_SMALL));
+			graphics.setFont(new Font("Lucida Console", Font.ITALIC, Const.SCOREBOARD_FONTSIZE_SMALL));
 			
 			int textWidth2 = Const.GAMEAREA_WIDTH /2 - graphics.getFontMetrics().stringWidth("Your score: " + brickScore.getScore()) / 2;
 			int textWidth3 = Const.GAMEAREA_WIDTH /2 - graphics.getFontMetrics().stringWidth("Press 'space' to play again") /2;
@@ -91,7 +91,7 @@ public class ScoreBoard extends Sprite {
 			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y +70, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y +70);
 			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y +80, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y +80);
 			
-			graphics.setFont(new Font("Arial", Font.BOLD, Const.SCOREBOARD_FONTSIZE_MEDIUM));
+			graphics.setFont(new Font("Lucida Console", Font.BOLD, Const.SCOREBOARD_FONTSIZE_MEDIUM));
 			
 			int textWidth = Const.GAMEAREA_WIDTH /2  - graphics.getFontMetrics().stringWidth("Victory") / 2;
 			int textHeight = graphics.getFontMetrics().getHeight();
@@ -99,7 +99,7 @@ public class ScoreBoard extends Sprite {
 			int textY = board.getHeight() /2 + 110 - textHeight + graphics.getFontMetrics().getAscent();
 			
 			graphics.drawString("Victory", textWidth, textY);
-			graphics.setFont(new Font("Arial", Font.ITALIC, Const.SCOREBOARD_FONTSIZE_SMALL));
+			graphics.setFont(new Font("Lucida Console", Font.ITALIC, Const.SCOREBOARD_FONTSIZE_SMALL));
 			
 			int textWidth2 = Const.GAMEAREA_WIDTH /2 - graphics.getFontMetrics().stringWidth("Your score: " + brickScore.getScore()) / 2;
 			int textWidth3 = Const.GAMEAREA_WIDTH /2 - graphics.getFontMetrics().stringWidth("Press 'space' to play again") /2;

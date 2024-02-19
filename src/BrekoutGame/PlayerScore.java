@@ -19,6 +19,7 @@ public class PlayerScore {
 	
 	@Override
     public String toString() {
+        //return String.format("%-3s %d", initials, score);
         return initials + score;
     }
 	

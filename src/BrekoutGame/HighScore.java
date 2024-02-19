@@ -31,7 +31,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.text.StyledEditorKit.FontSizeAction;
 
 public class HighScore extends JPanel {
-	
+
 	private DefaultListModel<PlayerScore> highScoreModel;
 	private static final String FILE_PATH = "highscores.txt";
 	private JLabel title;
@@ -47,7 +47,7 @@ public class HighScore extends JPanel {
 		JPanel titlePanel = new JPanel();
 		titlePanel.setOpaque(false);
 		title = new JLabel("HIGHSCORE:");
-		Font font = new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_MEDIUM);
+		Font font = new Font("Lucida Console", Font.BOLD, Const.HIGHSCORE_FONTSIZE_MEDIUM);
 		title.setFont(font);
 		title.setForeground(Color.CYAN); // Sätt textfärg
 		titlePanel.add(title); // Lägg till titelpanelen i toppen av panelen
@@ -57,15 +57,13 @@ public class HighScore extends JPanel {
 		highScoreModel = new DefaultListModel<>();
 		readFromFile();
 		/*
-		for (int i = 0; i < 10; i++) {
+		 * for (int i = 0; i < 10; i++) {
+		 * 
+		 * int DummyScore = 0; PlayerScore playerScore;
+		 * highScoreModel.addElement(playerScore = new PlayerScore("...", DummyScore));
+		 * }
+		 */
 
-			int DummyScore = 0;
-			PlayerScore playerScore;
-			highScoreModel.addElement(playerScore = new PlayerScore("...", DummyScore));
-		}
-		*/
-		
-		
 		// panel för att hålla highscore 1-10.
 		scorePanel = new JPanel();
 		scorePanel.setOpaque(false);
@@ -79,7 +77,7 @@ public class HighScore extends JPanel {
 		}
 
 		JList<String> ranking = new JList<>(rankingModel);
-		ranking.setFont(new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
+		ranking.setFont(new Font("Lucida Console", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		ranking.setForeground(new Color(255, 255, 255, 100));
 		ranking.setBackground(new Color(0, 0, 0, 0));
 		// Inaktivera interaktion med JList
@@ -88,7 +86,7 @@ public class HighScore extends JPanel {
 
 		// JList som används för att visa upp highScoreModel
 		JList<PlayerScore> highScoresTop10 = new JList<>(highScoreModel);
-		highScoresTop10.setFont(new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
+		highScoresTop10.setFont(new Font("Lucida Console", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		highScoresTop10.setBackground(new Color(0, 0, 0, 0));
 
 		scorePanel.add(ranking);
@@ -97,23 +95,19 @@ public class HighScore extends JPanel {
 		// Inaktivera interaktion med JList
 		highScoresTop10.setEnabled(false);
 		highScoresTop10.setFocusable(false);
-		
-		
 
 	}
 
 	public void pushNewScore(String initials, int score) {
 
 		int index = checkIndex(score);
-		String formattedInitials = initials + "     ";
+		String formattedInitials = initials + "   ";
 		PlayerScore playerScore = new PlayerScore(formattedInitials, score);
-		System.out.println(playerScore.toString());
-		System.out.println(highScoreModel.get(score).toString());
 		highScoreModel.add(index, playerScore);
 		popLastScore();
 		saveToFile();
 	}
-	
+
 	public void popLastScore() {
 		highScoreModel.remove(MAX);
 	}
@@ -151,20 +145,21 @@ public class HighScore extends JPanel {
 	}
 
 	public void readFromFile() {
+		
 		try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("     ");
-                if (parts.length == 2) {
-                    String initials = parts[0] + "     ";
-                    int score = Integer.parseInt(parts[1]);
-                    PlayerScore playerScore = new PlayerScore(initials, score);
-                    highScoreModel.addElement(playerScore);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			String line;
+			while ((line = reader.readLine()) != null) {
+				String[] parts = line.split("   ");
+				if (parts.length == 2) {
+					String initials = parts[0] + "   ";
+					int score = Integer.parseInt(parts[1]);
+					PlayerScore playerScore = new PlayerScore(initials, score);
+					highScoreModel.addElement(playerScore);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
