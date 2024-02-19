@@ -94,12 +94,9 @@ public class Game {
 		else if (ball.isEmpty()) {
 			scoreBoard.reduceBallsLeft();
 			if (scoreBoard.getBallsLeft() <= 0 && gameStateManager.getState() != State.GAMEOVER) {
-				latestRuns.addNewScore(brickCollection.getScore());
-				System.out.println("test");
+				latestRuns.pushNewScore(brickCollection.getScore());
 				gameStateManager.setState(State.GAMEOVER);
 				return;
-				
-				
 			}
 			else
 				ball.add(new Ball(Const.DEFAULT_VALUE, Const.DEFAULT_VALUE, Const.BALL_DIAMETER, Const.BALL_SPEED_X,
@@ -135,7 +132,7 @@ public class Game {
 				int speedY = 10;
 
 				newBalls.add(new Ball(hitBrick.getX() + hitBrick.getWidth() / 2 * i,
-						hitBrick.getY() + hitBrick.getHeight() * i, 20, speedX, speedY, false));
+						hitBrick.getY() + hitBrick.getHeight() * i, Const.BALL_DIAMETER, speedX, speedY, false));
 			}
 		}
 	}
@@ -217,8 +214,8 @@ public class Game {
 	                JOptionPane.INFORMATION_MESSAGE);
 	            if (initials != null && initials.length() <= 3) {
 	                //highScore.addNewScore(initials.toUpperCase(), brickCollection.getScore());
-	            	highScore.addNewScore(initials.toUpperCase(), brickCollection.getScore());
-	            	latestRuns.addNewScore(brickCollection.getScore());
+	            	highScore.pushNewScore(initials.toUpperCase(), brickCollection.getScore());
+	            	latestRuns.pushNewScore(brickCollection.getScore());
 	            	
 	            }
 	            highScoreDialogShown = true;

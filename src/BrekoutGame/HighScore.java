@@ -31,22 +31,23 @@ import javax.swing.ListSelectionModel;
 import javax.swing.text.StyledEditorKit.FontSizeAction;
 
 public class HighScore extends JPanel {
-
+	
 	private DefaultListModel<PlayerScore> highScoreModel;
 	private static final String FILE_PATH = "highscores.txt";
 	private JLabel title;
 	private JPanel scorePanel;
+	private static final int MAX = 10;
 
 	public HighScore() {
 
-		setPreferredSize(new Dimension(200, 350)); // Bestäm storlek
+		setPreferredSize(new Dimension(Const.HIGHSCORE_AREA_WIDTH, Const.HIGHSCORE_AREA_HEIGHT)); // Bestäm storlek
 		setOpaque(false);
 		this.setLayout(new BoxLayout(this, 1));
 
 		JPanel titlePanel = new JPanel();
 		titlePanel.setOpaque(false);
 		title = new JLabel("HIGHSCORE:");
-		Font font = new Font("Arial", Font.BOLD, Const.SCOREBOARD_FONTSIZE_SMALL - 10);
+		Font font = new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_MEDIUM);
 		title.setFont(font);
 		title.setForeground(Color.CYAN); // Sätt textfärg
 		titlePanel.add(title); // Lägg till titelpanelen i toppen av panelen
@@ -72,13 +73,13 @@ public class HighScore extends JPanel {
 
 		// skapar modellen av rankinglistan
 		DefaultListModel<String> rankingModel = new DefaultListModel<>();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < MAX; i++) {
 			String rank = (i + 1) + ".";
 			rankingModel.addElement(rank);
 		}
 
 		JList<String> ranking = new JList<>(rankingModel);
-		ranking.setFont(new Font("Arial", Font.BOLD, 18));
+		ranking.setFont(new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		ranking.setForeground(new Color(255, 255, 255, 100));
 		ranking.setBackground(new Color(0, 0, 0, 0));
 		// Inaktivera interaktion med JList
@@ -87,7 +88,7 @@ public class HighScore extends JPanel {
 
 		// JList som används för att visa upp highScoreModel
 		JList<PlayerScore> highScoresTop10 = new JList<>(highScoreModel);
-		highScoresTop10.setFont(new Font("Arial", Font.BOLD, 18));
+		highScoresTop10.setFont(new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		highScoresTop10.setBackground(new Color(0, 0, 0, 0));
 
 		scorePanel.add(ranking);
@@ -101,24 +102,20 @@ public class HighScore extends JPanel {
 
 	}
 
-	public void addNewScore(String initials, int score) {
-		// TODO Fixa så längden på mellanrummet mellan initialer och poäng blir bra.
+	public void pushNewScore(String initials, int score) {
 
 		int index = checkIndex(score);
-		// PlayerScore playerScore = null;
-		/*
-		 * if(initials.length() == 1) { playerScore = new PlayerScore(initials +
-		 * "           ", score); } else if(initials.length() == 2) { playerScore = new
-		 * PlayerScore(initials + "          ", score); } else if(initials.length() ==
-		 * 3) { playerScore = new PlayerScore(initials + "        ", score); }
-		 */
-
 		String formattedInitials = initials + "     ";
 		PlayerScore playerScore = new PlayerScore(formattedInitials, score);
-
+		System.out.println(playerScore.toString());
+		System.out.println(highScoreModel.get(score).toString());
 		highScoreModel.add(index, playerScore);
-		highScoreModel.remove(10);
+		popLastScore();
 		saveToFile();
+	}
+	
+	public void popLastScore() {
+		highScoreModel.remove(MAX);
 	}
 
 	public boolean isHighScore(int score) {
@@ -130,18 +127,17 @@ public class HighScore extends JPanel {
 
 	public int checkIndex(int score) {
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < MAX; i++) {
 			// Jämför det nya scoret med poängen i listan
 			if (score > highScoreModel.getElementAt(i).getScore()) {
 				return i; // Nya scoret är högre, returnerar index
 			}
 		}
 
-		return 10; // Nya scoret är inte högre än något i någon av listorna
+		return MAX; // Nya scoret är inte högre än något i någon av listorna
 	}
 
 	public void saveToFile() {
-
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
 			for (int i = 0; i < highScoreModel.size(); i++) {
 				PlayerScore playerScore = highScoreModel.getElementAt(i);
@@ -160,7 +156,6 @@ public class HighScore extends JPanel {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("     ");
                 if (parts.length == 2) {
-                	System.out.println("test");
                     String initials = parts[0] + "     ";
                     int score = Integer.parseInt(parts[1]);
                     PlayerScore playerScore = new PlayerScore(initials, score);

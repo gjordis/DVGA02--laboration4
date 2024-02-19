@@ -19,7 +19,7 @@ public class PlayerScore {
 	
 	@Override
     public String toString() {
-        return initials + " " + score;
+        return initials + score;
     }
 	
 }

@@ -22,7 +22,6 @@ public class Ball extends Sprite {
 		this.speedY = speedY;
 		this.startPosition = startPosition;
 		
-		
 	}
 
 	@Override
@@ -45,8 +44,6 @@ public class Ball extends Sprite {
 		graphics.setColor(Color.WHITE.darker().darker());
 		graphics.drawOval(getX()-2, getY()-2, diameter+4, diameter+4);
 		
-		
-
 	}
 	
 	public void initiationPosition(Paddle paddle) {
@@ -87,7 +84,6 @@ public class Ball extends Sprite {
 		// botten
 		if (getY() > windowHeight) {
 			alive = false;
-			
 		}
 	
 	}
@@ -129,8 +125,8 @@ public class Ball extends Sprite {
 	
 	public void resetBall() {
 		startPosition = true;
-		speedX = 10;
-		speedY = 10;
+		speedX = Const.BALL_SPEED_X;
+		speedY = Const.BALL_SPEED_Y;
 	}
 
 	public void reverseX() {

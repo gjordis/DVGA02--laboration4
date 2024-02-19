@@ -21,17 +21,18 @@ public class LatestRuns extends JPanel{
 	private DefaultListModel<PlayerScore> highScoreModelLatest3;
 	private JLabel title;
 	private JPanel latestScore;
+	private static final int MAX = 3;
 	
 	public LatestRuns() {
 		
-		setPreferredSize(new Dimension(200, 150)); // Bestäm storlek
+		setPreferredSize(new Dimension(Const.LATESTRUNS_AREA_WIDTH, Const.LATESTRUNS_AREA_HEIGHT)); // Bestäm storlek
 		setOpaque(false);
 		this.setLayout(new BoxLayout(this, 1));
 
 		JPanel titlePanel = new JPanel();
 		titlePanel.setOpaque(false);
-		title = new JLabel("PREVIOUS GAMES:");
-		Font font = new Font("Arial", Font.BOLD, Const.SCOREBOARD_FONTSIZE_SMALL - 10);
+		title = new JLabel("LATEST:");
+		Font font = new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_MEDIUM);
 		title.setFont(font);
 		title.setForeground(Color.CYAN); // Sätt textfärg
 		titlePanel.add(title); // Lägg till titelpanelen i toppen av panelen
@@ -39,7 +40,7 @@ public class LatestRuns extends JPanel{
 
 		// lägger in startdata för highscore-listorna
 		highScoreModelLatest3 = new DefaultListModel<>();
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < MAX; i++) {
 			
 			int DummyScore = 0;
 			PlayerScore playerScore;
@@ -54,13 +55,13 @@ public class LatestRuns extends JPanel{
 		
 		// skapar modellen av rankinglistan
 		DefaultListModel<String> listModel = new DefaultListModel<>();
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < MAX; i++) {
 		    String listNr = (i + 1) + ". ";
 		    listModel.addElement(listNr);
 		}
 		
 		JList<String> listNrs = new JList<>(listModel);
-		listNrs.setFont(new Font("Arial", Font.BOLD, 18));
+		listNrs.setFont(new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		listNrs.setForeground(new Color(255,255,255,100));
 		listNrs.setBackground(new Color(0,0,0,0));
 		// Inaktivera interaktion med JList
@@ -69,7 +70,7 @@ public class LatestRuns extends JPanel{
 		
 		// JList som används för att visa upp highScoreModelLatest3
 		JList<PlayerScore> latestScores = new JList<>(highScoreModelLatest3);
-		latestScores.setFont(new Font("Arial", Font.BOLD, 18));
+		latestScores.setFont(new Font("Arial", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		latestScores.setBackground(new Color(0,0,0,0));
 		
 		latestScore.add(listNrs);
@@ -83,16 +84,19 @@ public class LatestRuns extends JPanel{
 
 	}
 
-	public void addNewScore(int score) {
+	public void pushNewScore(int score) {
 
 		PlayerScore playerScore = null;
 		playerScore = new PlayerScore( "", score);
 		
 		
 		highScoreModelLatest3.add(0, playerScore);
+		popLastScore();
 
-		highScoreModelLatest3.remove(3);
-
+	}
+	
+	public void popLastScore() {
+		highScoreModelLatest3.remove(MAX);
 	}
 
 
