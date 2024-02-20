@@ -27,7 +27,7 @@ public class Game {
 	private GameStateManager gameStateManager;
 	private Paddle paddle;
 	private ArrayList<Ball> ball = new ArrayList<Ball>();
-	private ScoreBoard scoreBoard;
+	private ScoreTracker scoreTracker;
 	private int tickCount = 0;
 	private boolean highScoreDialogShown = false;
 
@@ -44,7 +44,7 @@ public class Game {
 				Const.PADDLE_NAME);
 		ball.add(new Ball(Const.DEFAULT_VALUE, Const.DEFAULT_VALUE, Const.BALL_DIAMETER, Const.BALL_SPEED_X,
 				Const.BALL_SPEED_Y, true));
-		scoreBoard = new ScoreBoard(1, 1, 1, 1, brickCollection, board, this);
+		scoreTracker = new ScoreTracker(1, 1, 1, 1, brickCollection, board, this);
 		gameStateManager = new GameStateManager(this);
 
 		/*
@@ -86,16 +86,20 @@ public class Game {
 		if (brickCollection.checkVictory()) {
 			gameStateManager.setState(State.VICTORY);
 			ball.clear();
-			registerHighScore();
+			if(highScore.isHighScore(brickCollection.getScore()))
+				registerHighScore();
+			latestRuns.pushNewScore(brickCollection.getScore());
 			return;
 		}
 
 		/* Inga bollar kvar på planen */
 		else if (ball.isEmpty()) {
-			scoreBoard.reduceBallsLeft();
-			if (scoreBoard.getBallsLeft() <= 0 && gameStateManager.getState() != State.GAMEOVER) {
-				latestRuns.pushNewScore(brickCollection.getScore());
+			scoreTracker.reduceBallsLeft();
+			if (scoreTracker.getBallsLeft() <= 0 && gameStateManager.getState() != State.GAMEOVER) {
 				gameStateManager.setState(State.GAMEOVER);
+				if(highScore.isHighScore(brickCollection.getScore()))
+					registerHighScore();
+				latestRuns.pushNewScore(brickCollection.getScore());
 				return;
 			} else
 				ball.add(new Ball(Const.DEFAULT_VALUE, Const.DEFAULT_VALUE, Const.BALL_DIAMETER, Const.BALL_SPEED_X,
@@ -107,7 +111,7 @@ public class Game {
 
 	public void draw(Graphics2D graphics) {
 
-		scoreBoard.draw(graphics);
+		scoreTracker.draw(graphics);
 		brickCollection.draw(graphics);
 		paddle.draw(graphics);
 		for (Ball b : ball) {
@@ -138,14 +142,14 @@ public class Game {
 
 	public void restartGame() {
 
-		scoreBoard.resetBallsLeft();
+		scoreTracker.resetBallsLeft();
 		brickCollection.resetScoreCount();
 		ball.clear();
 		this.brickCollection = new BrickCollection(Const.BRICKCOLLECTION_START_X, Const.BRICKCOLLECTION_START_Y,
 				Const.BRICKCOLLECTION_WIDTH, Const.BRICKCOLLECTION_HEIGHT, Const.BRICKCOLLECTION_SPACING,
 				Const.GAMEAREA_WIDTH);
 		// skickar med den nya kollektionen till scoreboard för att kunna räkna poäng
-		scoreBoard.countScoreOn(brickCollection);
+		scoreTracker.countScoreOn(brickCollection);
 		gameStateManager.setState(State.RUNNING);
 		highScoreDialogShown = false;
 		System.out.println("restart");
@@ -207,10 +211,13 @@ public class Game {
 	/* Visar upp en messagedialog, ber om specifik inmatning &
 	 * hanterar felaktiga inmatningar.
 	 * Anropar highScore med inmatad sträng & antalet poäng,
-	 * anropar latestScore med antalet poäng. */
+	 * anropar latestScore med antalet poäng. 
+	 * pre: highScore.isHighScore = true
+	 * post: visar upp messagedialog där användaren får mata in sina initialer,
+	 * när inmatningen uppfylls anropas pushNewScore med initialer & score*/
 	public void registerHighScore() {
 
-		if (!highScoreDialogShown && highScore.isHighScore(brickCollection.getScore())) {
+		if (!highScoreDialogShown) {
 	        String initials = "";
 	        boolean validInitials = false;
 	        while (!validInitials) {
@@ -231,12 +238,11 @@ public class Game {
 	                    validInitials = true;
 	                }
 	            } else {
-	                // Användaren valde att avbryta dialogen
+	                
 	                return;
 	            }
 	        }
 	        highScore.pushNewScore(initials.toUpperCase(), brickCollection.getScore());
-	        latestRuns.pushNewScore(brickCollection.getScore());
 	        highScoreDialogShown = true;
 	    }
 

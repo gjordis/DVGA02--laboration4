@@ -12,6 +12,7 @@ import java.awt.GridLayout;
 import java.awt.Shape;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -40,9 +41,9 @@ public class HighScore extends JPanel {
 
 	public HighScore() {
 
-		setPreferredSize(new Dimension(Const.HIGHSCORE_AREA_WIDTH, Const.HIGHSCORE_AREA_HEIGHT)); // Bestäm storlek
+		setPreferredSize(new Dimension(Const.HIGHSCORE_AREA_WIDTH, Const.HIGHSCORE_AREA_HEIGHT));
 		setOpaque(false);
-		this.setLayout(new BoxLayout(this, 1));
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		JPanel titlePanel = new JPanel();
 		titlePanel.setOpaque(false);
@@ -56,13 +57,6 @@ public class HighScore extends JPanel {
 		// lägger in startdata för highscore-listorna
 		highScoreModel = new DefaultListModel<>();
 		readFromFile();
-		/*
-		 * for (int i = 0; i < 10; i++) {
-		 * 
-		 * int DummyScore = 0; PlayerScore playerScore;
-		 * highScoreModel.addElement(playerScore = new PlayerScore("...", DummyScore));
-		 * }
-		 */
 
 		// panel för att hålla highscore 1-10.
 		scorePanel = new JPanel();
@@ -75,7 +69,7 @@ public class HighScore extends JPanel {
 			String rank = (i + 1) + ".";
 			rankingModel.addElement(rank);
 		}
-
+		/* Håller rankingModel som håller 1-10 */
 		JList<String> ranking = new JList<>(rankingModel);
 		ranking.setFont(new Font("Lucida Console", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		ranking.setForeground(new Color(255, 255, 255, 100));
@@ -97,7 +91,9 @@ public class HighScore extends JPanel {
 		highScoresTop10.setFocusable(false);
 
 	}
-
+	
+	/* Pre: 
+	 * Post:  */
 	public void pushNewScore(String initials, int score) {
 
 		int index = checkIndex(score);
@@ -108,10 +104,14 @@ public class HighScore extends JPanel {
 		saveToFile();
 	}
 
+	
 	public void popLastScore() {
 		highScoreModel.remove(MAX);
 	}
-
+	
+	/* Pre: true
+	 * Post: Om score är större än score i listan, returnerar true.
+	 * Annars returnerar false */
 	public boolean isHighScore(int score) {
 		if (checkIndex(score) >= 0 && checkIndex(score) <= 9)
 			return true;
@@ -119,16 +119,28 @@ public class HighScore extends JPanel {
 			return false;
 	}
 
+	/* Pre: true
+	 * Post: Om score är större än något av score i highScoreModel
+	 * returneras index, annars returneras global variabel "MAX" */
 	public int checkIndex(int score) {
 
-		for (int i = 0; i < MAX; i++) {
+		for (int index = 0; index < MAX; index++) {
 			// Jämför det nya scoret med poängen i listan
-			if (score > highScoreModel.getElementAt(i).getScore()) {
-				return i; // Nya scoret är högre, returnerar index
+			if (score > highScoreModel.getElementAt(index).getScore()) {
+				return index; // Nya scoret är högre, returnerar index
 			}
 		}
-
-		return MAX; // Nya scoret är inte högre än något i någon av listorna
+		return MAX;
+	}
+	
+	/* Pre: true
+	 * Post: Fyller highScoreModel med default värden */
+	public void setDefaultHighScoreModel() {
+		for(int i = 0; i < MAX; i++) {
+			PlayerScore defaultPlayer;
+			defaultPlayer = new PlayerScore("...",  0);
+			highScoreModel.add(i, defaultPlayer);
+		}
 	}
 
 	public void saveToFile() {
@@ -144,15 +156,16 @@ public class HighScore extends JPanel {
 		}
 
 	}
-
+	/* Pre: true
+	 * Post: Läser från filvägen "FILE_PATH",
+	 * finns ej filen skapas en ny fil med default-data */
 	public void readFromFile() {
-		
 		try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
 			String line;
 			highScoreModel.clear();
 			while ((line = reader.readLine()) != null) {
 				System.out.println("Splittar");
-				String[] parts = line.split(":");
+				String parts[] = line.split(":");
 				if (parts.length == 2) {
 					System.out.println("Läser");
 					String initials = parts[0];
@@ -161,9 +174,15 @@ public class HighScore extends JPanel {
 					highScoreModel.addElement(playerScore);
 				}
 			}
+		
+		} catch(FileNotFoundException e) {
+			setDefaultHighScoreModel();
+			saveToFile();
+			readFromFile();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} 
 	}
 
 }

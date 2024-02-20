@@ -9,13 +9,13 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-public class ScoreBoard extends Sprite {
+public class ScoreTracker extends Sprite {
 	private BrickCollection brickScore;
 	private int ballsLeft = 3;
 	private GameBoard board;
 	private Game game;
 
-	public ScoreBoard(int x, int y, int width, int height, BrickCollection score, GameBoard board, Game game) {
+	public ScoreTracker(int x, int y, int width, int height, BrickCollection score, GameBoard board, Game game) {
 		super(x, y, width, height);
 		this.brickScore = score;
 		this.board = board;

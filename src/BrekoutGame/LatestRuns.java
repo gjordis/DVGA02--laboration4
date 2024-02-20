@@ -48,7 +48,7 @@ public class LatestRuns extends JPanel{
 		}
 
 
-		// panel för att hålla highscore 1-10.
+		// panel för att hålla 3 senaste poängen.
 		latestScore = new JPanel();
 		latestScore.setOpaque(false);
 		add(latestScore, BorderLayout.CENTER);
