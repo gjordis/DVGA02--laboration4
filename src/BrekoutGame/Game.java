@@ -86,9 +86,7 @@ public class Game {
 		if (brickCollection.checkVictory()) {
 			gameStateManager.setState(State.VICTORY);
 			ball.clear();
-			if(highScore.isHighScore(brickCollection.getScore()))
-				registerHighScore();
-			latestRuns.pushNewScore(brickCollection.getScore());
+			registerHighScore();
 			return;
 		}
 
@@ -97,9 +95,7 @@ public class Game {
 			scoreTracker.reduceBallsLeft();
 			if (scoreTracker.getBallsLeft() <= 0 && gameStateManager.getState() != State.GAMEOVER) {
 				gameStateManager.setState(State.GAMEOVER);
-				if(highScore.isHighScore(brickCollection.getScore()))
-					registerHighScore();
-				latestRuns.pushNewScore(brickCollection.getScore());
+				registerHighScore();
 				return;
 			} else
 				ball.add(new Ball(Const.DEFAULT_VALUE, Const.DEFAULT_VALUE, Const.BALL_DIAMETER, Const.BALL_SPEED_X,
@@ -208,16 +204,16 @@ public class Game {
 		ball.addAll(newBalls);
 	}
 
-	/* Visar upp en messagedialog, ber om specifik inmatning &
-	 * hanterar felaktiga inmatningar.
-	 * Anropar highScore med inmatad sträng & antalet poäng,
-	 * anropar latestScore med antalet poäng. 
-	 * pre: highScore.isHighScore = true
-	 * post: visar upp messagedialog där användaren får mata in sina initialer,
-	 * när inmatningen uppfylls anropas pushNewScore med initialer & score*/
+	/* Metod som visar upp en dialogruta & anropar metoder för att
+	 * registrera nya poäng som användaren uppnått.
+	 * 
+	 * pre: true
+	 * post: Vid highScore visas en dialogruta där initialer skall matas in.
+	 * 		 Har allt matats in anropas highScore.pushNewScore() med initialer & score.
+	 * 		 latestRuns.pushNewScore() anropas alltid med score */
 	public void registerHighScore() {
 
-		if (!highScoreDialogShown) {
+		if (!highScoreDialogShown && highScore.isHighScore(brickCollection.getScore())) {
 	        String initials = "";
 	        boolean validInitials = false;
 	        while (!validInitials) {
@@ -245,6 +241,7 @@ public class Game {
 	        highScore.pushNewScore(initials.toUpperCase(), brickCollection.getScore());
 	        highScoreDialogShown = true;
 	    }
+		latestRuns.pushNewScore(brickCollection.getScore());
 
 	}
 
