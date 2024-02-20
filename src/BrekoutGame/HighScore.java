@@ -101,7 +101,7 @@ public class HighScore extends JPanel {
 	public void pushNewScore(String initials, int score) {
 
 		int index = checkIndex(score);
-		String formattedInitials = initials + "   ";
+		String formattedInitials = initials;
 		PlayerScore playerScore = new PlayerScore(formattedInitials, score);
 		highScoreModel.add(index, playerScore);
 		popLastScore();
@@ -134,8 +134,9 @@ public class HighScore extends JPanel {
 	public void saveToFile() {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
 			for (int i = 0; i < highScoreModel.size(); i++) {
+				System.out.println("test antal write:" + i);
 				PlayerScore playerScore = highScoreModel.getElementAt(i);
-				writer.write(playerScore.getInitials() + playerScore.getScore());
+				writer.write(playerScore.getInitials() + ":" + playerScore.getScore());
 				writer.newLine();
 			}
 		} catch (IOException e) {
@@ -148,10 +149,13 @@ public class HighScore extends JPanel {
 		
 		try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
 			String line;
+			highScoreModel.clear();
 			while ((line = reader.readLine()) != null) {
-				String[] parts = line.split("   ");
+				System.out.println("Splittar");
+				String[] parts = line.split(":");
 				if (parts.length == 2) {
-					String initials = parts[0] + "   ";
+					System.out.println("Läser");
+					String initials = parts[0];
 					int score = Integer.parseInt(parts[1]);
 					PlayerScore playerScore = new PlayerScore(initials, score);
 					highScoreModel.addElement(playerScore);
