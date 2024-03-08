@@ -24,7 +24,13 @@ public class Paddle extends Sprite {
 
 	@Override
 	public void update(Keyboard keyboard) {
-		
+		if (keyboard.isKeyDown(Key.Left)) {
+			setX(getX() - paddleSpeed);
+		}
+		if (keyboard.isKeyDown(Key.Right)) {
+			setX(getX() + paddleSpeed);
+		}
+		updateBounds();
 	}
 
 	@Override
@@ -47,18 +53,8 @@ public class Paddle extends Sprite {
 		graphics.drawString(name, textX, textY);
 
 	}
-
-	public void move(Keyboard keyboard) {
-
-		if (keyboard.isKeyDown(Key.Left)) {
-			setX(getX() - paddleSpeed);
-		}
-		if (keyboard.isKeyDown(Key.Right)) {
-			setX(getX() + paddleSpeed);
-		}
-		updateBounds();
-	}
-
+	
+	/* säkerställer att paddeln inte åker utanför spelplanen */
 	public void isInsideWindow(int windowWidth) {
 		if (getX() + width > windowWidth) {
 			setX(windowWidth - width);

@@ -41,18 +41,7 @@ public class BrickCollection {
 				break;
 			case 3:
 				bricks.add(new CyanBrick(currentX, currentY, width, height));
-				break;
-				/*
-			case 4:
-				
-				invincibleBrickCount++;
-				if(invincibleBrickCount % 2 == 0) {
-					bricks.add(new InvincibleBrick(currentX, currentY, width, height));
-				}else
-					bricks.add(new CyanBrick(currentX, currentY, width, height));
-				break;
-				*/
-				
+				break;	
 			}
 			
 			currentX += width + spacing;
@@ -75,7 +64,9 @@ public class BrickCollection {
 	
 	/* Kontroll om bollen träffar en bricka, vid träff returneras denna bricka.
 	 * Alla sidor på bollen kontrolleras mot brickans sidor. 
-	 * inktäktar bollen på brickan uppfylls if-satsen */
+	 * inktäktar bollen på brickan uppfylls if-satsen 
+	 * pre: anropas från Game.update()
+	 * post: returnerar bricka vid träff, annars returnerar null*/
 	public ColoredBrick hitByBall(Ball ball) {
 		for (ColoredBrick brick : bricks) {
 			
@@ -86,6 +77,7 @@ public class BrickCollection {
 				/* stannar bollen för att förhindra konstiga studsar med brickor */
 				ball.setY(ball.getY());
 				ball.setX(ball.getX());
+				ball.reverseY();
 				return brick;
 			}
 			
@@ -93,13 +85,12 @@ public class BrickCollection {
 		return null;
 	}
 	
-
+	/* Tar bort brickan som skickas med som referens
+	 * pre: brick.getHp <= 0
+	 * post: tar bort brickan från listan */
 	public void removeBrick(ColoredBrick brick) {
-		if (brick.getHp() == 0) {
-			bricks.remove(brick);
 			scoreCount += brick.getKillScore();
-	
-		}
+			bricks.remove(brick);	
 	}
 
 	public int getScore() {

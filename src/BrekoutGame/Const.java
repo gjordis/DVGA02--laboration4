@@ -6,8 +6,9 @@
 package BrekoutGame;
 
 public class Const {
-	
+	/* Default variabler */
 	public static int DEFAULT_VALUE = 0;
+	public static int DEFAULT_FONTSIZE = 20;
 	
 	/* Widths & Heights for gamearea and highscore-bar */
 	public static int GAMEAREA_WIDTH = 1200;
@@ -20,17 +21,17 @@ public class Const {
 	public static int HIGHSCORE_FONTSIZE_MEDIUM = 24;
 	
 	
-	/* ScoreBoard */
-	public static final int SCOREBOARD_LINE_START_X = 500;
-	public static final int SCOREBOARD_LINE_START_Y = 450;
-	public static final int SCOREBOARD_LINE_END_X = 700;
-	public static final int SCOREBOARD_LINE_END_Y = 450;
-	public static final int SCOREBOARD_FONTSIZE_SMALL = 30;
-	public static final int SCOREBOARD_FONTSIZE_MEDIUM = 40;
-	public static final int SCOREBOARD_FONTSIZE_LARGE = 80;
-	public static final int SCOREBOARD_BALLS_LEFT_X = 540;
-	public static final int SCOREBOARD_BALLS_LEFT_Y = 550;
-	public static final int SCOREBOARD_BALLS_LEFT_DIAMETER = 20;
+	/* Score tracker */
+	public static final int SCORETRACKER_LINE_START_X = 500;
+	public static final int SCORETRACKER_LINE_START_Y = 450;
+	public static final int SCORETRACKER_LINE_END_X = 700;
+	public static final int SCORETRACKER_LINE_END_Y = 450;
+	public static final int SCORETRACKER_FONTSIZE_SMALL = 30;
+	public static final int SCORETRACKER_FONTSIZE_MEDIUM = 40;
+	public static final int SCORETRACKER_FONTSIZE_LARGE = 80;
+	public static final int SCORETRACKER_BALLS_LEFT_X = 540;
+	public static final int SCORETRACKER_BALLS_LEFT_Y = 550;
+	public static final int SCORETRACKER_BALLS_LEFT_DIAMETER = 20;
 	
 	/* Paddle */
 	public static final int PADDLE_WIDTH = 150;

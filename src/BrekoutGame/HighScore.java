@@ -34,16 +34,15 @@ import javax.swing.text.StyledEditorKit.FontSizeAction;
 public class HighScore extends JPanel {
 
 	private DefaultListModel<PlayerScore> highScoreModel;
-	private static final String FILE_PATH = "highscores.txt";
+	private final String FILE_PATH = "highscores.txt";
 	private JLabel title;
 	private JPanel scorePanel;
-	private static final int MAX = 10;
+	private final int MAX = 10;
 
 	public HighScore() {
 
 		setPreferredSize(new Dimension(Const.HIGHSCORE_AREA_WIDTH, Const.HIGHSCORE_AREA_HEIGHT));
 		setOpaque(false);
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		JPanel titlePanel = new JPanel();
 		titlePanel.setOpaque(false);
@@ -52,24 +51,24 @@ public class HighScore extends JPanel {
 		title.setFont(font);
 		title.setForeground(Color.CYAN); // Sätt textfärg
 		titlePanel.add(title); // Lägg till titelpanelen i toppen av panelen
-		add(titlePanel, BorderLayout.WEST);
+		add(titlePanel);
 
 		// lägger in startdata för highscore-listorna
 		highScoreModel = new DefaultListModel<>();
 		readFromFile();
 
-		// panel för att hålla highscore 1-10.
+		// panel för att hålla highscore-listan.
 		scorePanel = new JPanel();
 		scorePanel.setOpaque(false);
-		add(scorePanel, BorderLayout.CENTER);
+		add(scorePanel);
 
-		// skapar modellen av rankinglistan
+		// skapar modellen av rankinglistan 1., 2., 3. osv..
 		DefaultListModel<String> rankingModel = new DefaultListModel<>();
 		for (int i = 0; i < MAX; i++) {
 			String rank = (i + 1) + ".";
 			rankingModel.addElement(rank);
 		}
-		/* Håller rankingModel som håller 1-10 */
+		/* JList som används för att visa upp ranking nummer */
 		JList<String> ranking = new JList<>(rankingModel);
 		ranking.setFont(new Font("Lucida Console", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		ranking.setForeground(new Color(255, 255, 255, 100));
@@ -82,13 +81,15 @@ public class HighScore extends JPanel {
 		JList<PlayerScore> highScoresTop10 = new JList<>(highScoreModel);
 		highScoresTop10.setFont(new Font("Lucida Console", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		highScoresTop10.setBackground(new Color(0, 0, 0, 0));
-
-		scorePanel.add(ranking);
-		scorePanel.add(highScoresTop10);
-
 		// Inaktivera interaktion med JList
 		highScoresTop10.setEnabled(false);
 		highScoresTop10.setFocusable(false);
+		
+		/* lägger in rankingen och listan i panelen */
+		scorePanel.add(ranking);
+		scorePanel.add(highScoresTop10);
+
+		
 
 	}
 	

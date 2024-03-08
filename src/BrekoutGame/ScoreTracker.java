@@ -9,26 +9,19 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-public class ScoreTracker extends Sprite {
+public class ScoreTracker {
 	private BrickCollection brickScore;
 	private int ballsLeft = 3;
 	private GameBoard board;
 	private Game game;
 
-	public ScoreTracker(int x, int y, int width, int height, BrickCollection score, GameBoard board, Game game) {
-		super(x, y, width, height);
+	public ScoreTracker(BrickCollection score, GameBoard board, Game game) {
+		
 		this.brickScore = score;
 		this.board = board;
 		this.game = game;
 	}
 
-	@Override
-	public void update(Keyboard keyboard) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void draw(Graphics2D graphics) {
 		/* Ritar upp scoreboard */
 		/* Om spelaren har bollar kvar visas en live scoreboard
@@ -37,23 +30,23 @@ public class ScoreTracker extends Sprite {
 			graphics.setColor(Color.CYAN.darker());
 			graphics.setFont(new Font("Lucida Console", Font.BOLD, 40));
 			String score = String.valueOf(brickScore.getScore());
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y);
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y -10, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y -10);
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y +70, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y +70);
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y +80, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y +80);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y -10, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y -10);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y +70, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y +70);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y +80, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y +80);
 			
 			// kontrollerar antalet bollar kvar
-			graphics.drawOval(Const.SCOREBOARD_BALLS_LEFT_X  * 45, Const.SCOREBOARD_BALLS_LEFT_Y, Const.SCOREBOARD_BALLS_LEFT_DIAMETER, Const.SCOREBOARD_BALLS_LEFT_DIAMETER);
-			graphics.drawOval(Const.SCOREBOARD_BALLS_LEFT_X + 1 * 45, Const.SCOREBOARD_BALLS_LEFT_Y, Const.SCOREBOARD_BALLS_LEFT_DIAMETER, Const.SCOREBOARD_BALLS_LEFT_DIAMETER);
-			graphics.drawOval(Const.SCOREBOARD_BALLS_LEFT_X + 2 * 45, Const.SCOREBOARD_BALLS_LEFT_Y, Const.SCOREBOARD_BALLS_LEFT_DIAMETER, Const.SCOREBOARD_BALLS_LEFT_DIAMETER);
+			graphics.drawOval(Const.SCORETRACKER_BALLS_LEFT_X  * 45, Const.SCORETRACKER_BALLS_LEFT_Y, Const.SCORETRACKER_BALLS_LEFT_DIAMETER, Const.SCORETRACKER_BALLS_LEFT_DIAMETER);
+			graphics.drawOval(Const.SCORETRACKER_BALLS_LEFT_X + 1 * 45, Const.SCORETRACKER_BALLS_LEFT_Y, Const.SCORETRACKER_BALLS_LEFT_DIAMETER, Const.SCORETRACKER_BALLS_LEFT_DIAMETER);
+			graphics.drawOval(Const.SCORETRACKER_BALLS_LEFT_X + 2 * 45, Const.SCORETRACKER_BALLS_LEFT_Y, Const.SCORETRACKER_BALLS_LEFT_DIAMETER, Const.SCORETRACKER_BALLS_LEFT_DIAMETER);
 			for(int i = 0; i < ballsLeft; i++) {
-				graphics.fillOval(Const.SCOREBOARD_BALLS_LEFT_X + i * 45, Const.SCOREBOARD_BALLS_LEFT_Y, Const.SCOREBOARD_BALLS_LEFT_DIAMETER, Const.SCOREBOARD_BALLS_LEFT_DIAMETER);
+				graphics.fillOval(Const.SCORETRACKER_BALLS_LEFT_X + i * 45, Const.SCORETRACKER_BALLS_LEFT_Y, Const.SCORETRACKER_BALLS_LEFT_DIAMETER, Const.SCORETRACKER_BALLS_LEFT_DIAMETER);
 			}
 			
 			int textWidth = graphics.getFontMetrics().stringWidth(score);
 			int textHeight = graphics.getFontMetrics().getHeight();
 
-			int textX = 600 - textWidth /2;
+			int textX = Const.GAMEAREA_WIDTH / 2 - textWidth /2;
 			int textY = 510 - textHeight + graphics.getFontMetrics().getAscent();
 			
 			graphics.drawString(score, textX, textY);
@@ -61,12 +54,12 @@ public class ScoreTracker extends Sprite {
 		/* Ritar upp Game Over om spelaren har slut på bollar */
 		else if (ballsLeft <= 0) {
 			graphics.setColor(Color.CYAN.darker());
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y);
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y -10, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y -10);
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y +70, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y +70);
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y +80, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y +80);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y -10, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y -10);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y +70, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y +70);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y +80, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y +80);
 			
-			graphics.setFont(new Font("Lucida Console", Font.BOLD, Const.SCOREBOARD_FONTSIZE_MEDIUM));
+			graphics.setFont(new Font("Lucida Console", Font.BOLD, Const.SCORETRACKER_FONTSIZE_MEDIUM));
 			
 			int textWidth = Const.GAMEAREA_WIDTH /2  - graphics.getFontMetrics().stringWidth("Game Over") / 2;
 			int textHeight = graphics.getFontMetrics().getHeight();
@@ -74,7 +67,7 @@ public class ScoreTracker extends Sprite {
 			int textY = board.getHeight() /2 + 110 - textHeight + graphics.getFontMetrics().getAscent();
 			
 			graphics.drawString("Game Over", textWidth, textY);
-			graphics.setFont(new Font("Lucida Console", Font.ITALIC, Const.SCOREBOARD_FONTSIZE_SMALL));
+			graphics.setFont(new Font("Lucida Console", Font.ITALIC, Const.SCORETRACKER_FONTSIZE_SMALL));
 			
 			int textWidth2 = Const.GAMEAREA_WIDTH /2 - graphics.getFontMetrics().stringWidth("Your score: " + brickScore.getScore()) / 2;
 			int textWidth3 = Const.GAMEAREA_WIDTH /2 - graphics.getFontMetrics().stringWidth("Press 'space' to play again") /2;
@@ -86,12 +79,12 @@ public class ScoreTracker extends Sprite {
 		/* Ritar upp Victory vid vinst */
 		else if(game.getState() == State.VICTORY) {
 			graphics.setColor(Color.CYAN.darker());
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y);
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y -10, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y -10);
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y +70, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y +70);
-			graphics.drawLine(Const.SCOREBOARD_LINE_START_X, Const.SCOREBOARD_LINE_START_Y +80, Const.SCOREBOARD_LINE_END_X, Const.SCOREBOARD_LINE_END_Y +80);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y -10, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y -10);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y +70, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y +70);
+			graphics.drawLine(Const.SCORETRACKER_LINE_START_X, Const.SCORETRACKER_LINE_START_Y +80, Const.SCORETRACKER_LINE_END_X, Const.SCORETRACKER_LINE_END_Y +80);
 			
-			graphics.setFont(new Font("Lucida Console", Font.BOLD, Const.SCOREBOARD_FONTSIZE_MEDIUM));
+			graphics.setFont(new Font("Lucida Console", Font.BOLD, Const.SCORETRACKER_FONTSIZE_MEDIUM));
 			
 			int textWidth = Const.GAMEAREA_WIDTH /2  - graphics.getFontMetrics().stringWidth("Victory") / 2;
 			int textHeight = graphics.getFontMetrics().getHeight();
@@ -99,7 +92,7 @@ public class ScoreTracker extends Sprite {
 			int textY = board.getHeight() /2 + 110 - textHeight + graphics.getFontMetrics().getAscent();
 			
 			graphics.drawString("Victory", textWidth, textY);
-			graphics.setFont(new Font("Lucida Console", Font.ITALIC, Const.SCOREBOARD_FONTSIZE_SMALL));
+			graphics.setFont(new Font("Lucida Console", Font.ITALIC, Const.SCORETRACKER_FONTSIZE_SMALL));
 			
 			int textWidth2 = Const.GAMEAREA_WIDTH /2 - graphics.getFontMetrics().stringWidth("Your score: " + brickScore.getScore()) / 2;
 			int textWidth3 = Const.GAMEAREA_WIDTH /2 - graphics.getFontMetrics().stringWidth("Press 'space' to play again") /2;
@@ -125,18 +118,5 @@ public class ScoreTracker extends Sprite {
 	public void resetBallsLeft() {
 		ballsLeft = 4;
 	}
-
-	@Override
-	public void updateBounds() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 
 }

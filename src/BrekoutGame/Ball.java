@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Ball extends Sprite {
-	private int diameter, speedX = 10, speedY = 10;
+	private int diameter, speedX, speedY;
 	private boolean startPosition = false;
 	private boolean alive = true;
 	
@@ -45,7 +45,7 @@ public class Ball extends Sprite {
 		graphics.drawOval(getX()-2, getY()-2, diameter+4, diameter+4);
 		
 	}
-	
+	/*  */
 	public void initiationPosition(Paddle paddle) {
 		/* Om flaggan startPosition är true,
 		 * placerar bollen mitt på paddeln */
@@ -116,7 +116,7 @@ public class Ball extends Sprite {
 					speedX = (ballHitPoint - paddleCenter) / 6;
 					// System.out.println("ballHit: " + ballHit);
 					// System.out.println("paddleCenter: " + paddleCenter);
-					// System.out.println(speedX);
+					 System.out.println(speedX);
 				}
 			}
 		

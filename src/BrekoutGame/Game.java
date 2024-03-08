@@ -44,15 +44,12 @@ public class Game {
 				Const.PADDLE_NAME);
 		ball.add(new Ball(Const.DEFAULT_VALUE, Const.DEFAULT_VALUE, Const.BALL_DIAMETER, Const.BALL_SPEED_X,
 				Const.BALL_SPEED_Y, true));
-		scoreTracker = new ScoreTracker(1, 1, 1, 1, brickCollection, board, this);
+		scoreTracker = new ScoreTracker( brickCollection, board, this);
 		gameStateManager = new GameStateManager(this);
 
-		/*
-		 * Skapar en panel för score och lägger in instanser av HighScore & LatestRuns
-		 * ingen snygg lösning men fungerar..
-		 */
+		/* Skapar en panel för score och lägger in instanser av HighScore & LatestRuns */
 		JPanel HighScorePanel = new JPanel();
-		JPanel filler = new JPanel();
+		JPanel filler = new JPanel(); // används som space mellan listorna
 		filler.setPreferredSize(new Dimension(200, 300));
 		filler.setOpaque(false);
 
@@ -77,7 +74,7 @@ public class Game {
 		if (gameStateManager.getState() == State.PAUSED)
 			return;
 
-		paddle.move(keyboard);
+		paddle.update(keyboard);
 		paddle.isInsideWindow(Const.GAMEAREA_WIDTH);
 
 		gameStateManager.manageWinLoss(keyboard);
@@ -116,12 +113,15 @@ public class Game {
 
 		if (gameStateManager.getState() == State.PAUSED) {
 			graphics.setColor(Color.CYAN.brighter());
-			graphics.setFont(new Font("Lucida Console", Font.ITALIC, Const.SCOREBOARD_FONTSIZE_LARGE * 2));
+			graphics.setFont(new Font("Lucida Console", Font.ITALIC, Const.SCORETRACKER_FONTSIZE_LARGE * 2));
 			int textWidth = Const.GAMEAREA_WIDTH / 2 - graphics.getFontMetrics().stringWidth("PAUSED") / 2;
 			graphics.drawString("PAUSED", textWidth, board.getHeight() / 2 + 80);
 		}
 	}
-
+	/* Skapar flera bollar på den brick som förstördes om brickan hade en powerup
+	 * Pre: hitBrick.getHp() <= 0
+	 * Post: Skapar extrabollar från den brick som förstörts &
+	 * 		 lägger till bollarna i en temporära listan som skickades med "newBalls"*/
 	public void powerUpExtraBalls(ColoredBrick hitBrick, List<Ball> newBalls) {
 		if (hitBrick.getPowerUp() == "multiBall") {
 			Random random = new Random();
@@ -135,7 +135,11 @@ public class Game {
 			}
 		}
 	}
-
+	/* Startar om spelet
+	 * 
+	 * Pre: keyboard.isKeyDown(Key.Space) && currentState == State.GAMEOVER || 
+	 * 		keyboard.isKeyDown(Key.Space) && currentState == State.VICTORY
+	 * Post: Nollställer alla värden & genererar en ny spelplan */
 	public void restartGame() {
 
 		scoreTracker.resetBallsLeft();
@@ -151,13 +155,19 @@ public class Game {
 		System.out.println("restart");
 
 	}
-
+	
+	
+	/* Hanterar bollen/bollarnas kollision med paddel & bricks
+	 * 
+	 * Pre: Används endast inom update() metoden i klassen Game
+	 * Post: Anropar metoder hos objekt boll träffar &
+	 * 		 tar bort bollar som är "döda" */
 	public void manageBallBrickLogics(Keyboard keyboard) {
 		/*
 		 * Hanterar möjligheten till fler än en boll genom att ha en lista med alla
 		 * bollar
 		 */
-		List<Ball> newBalls = new ArrayList<>();
+		List<Ball> newBalls = new ArrayList<>(); // temporär lista för nya bollar
 		Iterator<Ball> iterator = ball.iterator();
 		while (iterator.hasNext()) {
 
@@ -174,10 +184,6 @@ public class Game {
 			if (keyboard.isKeyDown(Key.Space) && b.getStartPosition())
 				b.setBallToPaddle(false);
 
-			/* !!Skall tas bord!! Används för test */
-			if (keyboard.isKeyDown(Key.Enter))
-				b.resetBall();
-
 			/*
 			 * Kontrollerar om en bricka är träffad genom att använda logiken i hitByBall
 			 * metoden i brickCollection. Vid träff returneras den träffade brickan.
@@ -185,13 +191,10 @@ public class Game {
 			ColoredBrick hitBrick = brickCollection.hitByBall(b);
 			if (hitBrick != null) {
 				hitBrick.hit();
-				hitBrick.updateColor(hitBrick.getHp());
 				if (hitBrick.getHp() <= 0) {
 					powerUpExtraBalls(hitBrick, newBalls);
 					brickCollection.removeBrick(hitBrick);
-
 				}
-				b.reverseY();
 			}
 
 			/* Rensar bort döda bollar */

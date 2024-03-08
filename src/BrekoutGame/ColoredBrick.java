@@ -46,43 +46,33 @@ public class ColoredBrick extends Sprite {
 
 		/* Ritar upp text inne i brick med antal hp kvar */
 		graphics.setColor(Color.BLACK);
-		graphics.setFont(new Font("Arial", Font.BOLD, 20));
+		graphics.setFont(new Font("Arial", Font.BOLD, Const.DEFAULT_FONTSIZE));
 
 		int textWidth = graphics.getFontMetrics().stringWidth(getHp() + "");
 		int textHeight = graphics.getFontMetrics().getHeight();
 		int textX = getX() + (getWidth() - textWidth) / 2;
 		int textY = getY() + (getHeight() - textHeight) / 2 + graphics.getFontMetrics().getAscent();
+
+		graphics.drawString(getHp() + "", textX, textY);
 		
-		if (brickHp != 1337) {
-			graphics.drawString(getHp() + "", textX, textY);
-		}
 		
 	}
-
-	public void hit() {
-		if (brickHp != 1337) {
-			this.brickHp--;
-		}
+	/* minskar brickans hälsa
+	 * pre: BrickCollection.hitbyBall != null
+	 * post: minskar brickans hälsa med 1 */
+	public void hit() {	
+		this.brickHp--;	
+		updateColor();
 	}
 
 	public int getHp() {
 		return this.brickHp;
 	}
-
-	public void updateColor(int brickHp) {
-		switch (brickHp) {
-		case 0:
-			break;
-		case 1:
-			this.brickColor = brickColor.brighter();
-			break;
-		case 2:
-			this.brickColor = brickColor.brighter();
-			break;
-		case 3:
-			this.brickColor = brickColor.brighter();
-			break;
-		}
+	/* Ändrar brickans ljushet beroende på antalet brickHp
+	 * pre: brickHp ändras
+	 * post: gör brickan ljusare */
+	private void updateColor() {
+		this.brickColor = brickColor.brighter();
 	}
 
 	public int gethitScore() {
