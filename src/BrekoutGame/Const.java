@@ -13,8 +13,8 @@ public class Const {
 	/* Widths & Heights for gamearea and highscore-bar */
 	public static int GAMEAREA_WIDTH = 1200;
 	public static int GAMEAREA_HEIGHT = 800;
-	public static int HIGHSCORE_AREA_WIDTH = 200; // implementera denna!
-	public static int LATESTRUNS_AREA_WIDTH = 200;
+	public static int HIGHSCORE_AREA_WIDTH = 150;
+	public static int LATESTRUNS_AREA_WIDTH = 150;
 	public static int HIGHSCORE_AREA_HEIGHT = 350;
 	public static int LATESTRUNS_AREA_HEIGHT = 150;
 	public static int HIGHSCORE_FONTSIZE_SMALL = 18;

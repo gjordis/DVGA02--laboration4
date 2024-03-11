@@ -20,7 +20,6 @@ public class PlayerScore {
 	@Override
     public String toString() {
         return String.format("%-4s %d", initials, score);
-        
     }
 	
 }

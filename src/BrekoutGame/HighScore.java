@@ -34,6 +34,7 @@ import javax.swing.text.StyledEditorKit.FontSizeAction;
 public class HighScore extends JPanel {
 
 	private DefaultListModel<PlayerScore> highScoreModel;
+	private DefaultListModel<String> rankingModel;
 	private final String FILE_PATH = "highscores.txt";
 	private JLabel title;
 	private JPanel scorePanel;
@@ -44,31 +45,23 @@ public class HighScore extends JPanel {
 		setPreferredSize(new Dimension(Const.HIGHSCORE_AREA_WIDTH, Const.HIGHSCORE_AREA_HEIGHT));
 		setOpaque(false);
 
-		JPanel titlePanel = new JPanel();
-		titlePanel.setOpaque(false);
 		title = new JLabel("HIGHSCORE:");
 		Font font = new Font("Lucida Console", Font.BOLD, Const.HIGHSCORE_FONTSIZE_MEDIUM);
 		title.setFont(font);
 		title.setForeground(Color.CYAN); // Sätt textfärg
-		titlePanel.add(title); // Lägg till titelpanelen i toppen av panelen
-		add(titlePanel);
+		add(title);// Lägg till titelpanelen i toppen av panelen
 
-		// lägger in startdata för highscore-listorna
+		// initierar listan och försöker läsa från fil.
 		highScoreModel = new DefaultListModel<>();
 		readFromFile();
 
-		// panel för att hålla highscore-listan.
-		scorePanel = new JPanel();
-		scorePanel.setOpaque(false);
-		add(scorePanel);
-
-		// skapar modellen av rankinglistan 1., 2., 3. osv..
-		DefaultListModel<String> rankingModel = new DefaultListModel<>();
+		// initierar ranking-listan, lägger in värden, 1., 2. osv
+		rankingModel = new DefaultListModel<>();
 		for (int i = 0; i < MAX; i++) {
 			String rank = (i + 1) + ".";
 			rankingModel.addElement(rank);
 		}
-		/* JList som används för att visa upp ranking nummer */
+		/* JList som används för att visa upp rankingModel */
 		JList<String> ranking = new JList<>(rankingModel);
 		ranking.setFont(new Font("Lucida Console", Font.BOLD, Const.HIGHSCORE_FONTSIZE_SMALL));
 		ranking.setForeground(new Color(255, 255, 255, 100));
@@ -84,35 +77,47 @@ public class HighScore extends JPanel {
 		// Inaktivera interaktion med JList
 		highScoresTop10.setEnabled(false);
 		highScoresTop10.setFocusable(false);
-		
-		/* lägger in rankingen och listan i panelen */
+
+		// panel för att hålla highscore-listan.
+		scorePanel = new JPanel();
+		scorePanel.setOpaque(false);
+		add(scorePanel);
+
+		/* lägger in rankingen och ranking & highscore-listan */
 		scorePanel.add(ranking);
 		scorePanel.add(highScoresTop10);
 
-		
-
 	}
-	
-	/* Pre: 
-	 * Post:  */
+
+	/* Lägger till ett nytt resultat i highscore-listan.
+	 * 
+	 * Pre: isHighScore == true
+	 * Post: Adderar initialer och poäng i highScoreModel, 
+	 * rensar det utfallande resultatet och sparar till fil.
+	 */
 	public void pushNewScore(String initials, int score) {
 
 		int index = checkIndex(score);
-		String formattedInitials = initials;
-		PlayerScore playerScore = new PlayerScore(formattedInitials, score);
+		PlayerScore playerScore = new PlayerScore(initials, score);
 		highScoreModel.add(index, playerScore);
 		popLastScore();
 		saveToFile();
 	}
 
-	
+	/*
+	 * rensar bort det sista resultatet som skall åka ut när någon ny gör ett bättre
+	 * resultat pre: true post: tar bort sista objektet
+	 */
 	public void popLastScore() {
 		highScoreModel.remove(MAX);
 	}
-	
-	/* Pre: true
-	 * Post: Om score är större än score i listan, returnerar true.
-	 * Annars returnerar false */
+
+	/* Kontrollerar om poängen är ett rekord eller inte.
+	 * 
+	 * Pre: true 
+	 * Post: Om score är större än score i listan, returnerar true. Annars
+	 * returnerar false
+	 */
 	public boolean isHighScore(int score) {
 		if (checkIndex(score) >= 0 && checkIndex(score) <= 9)
 			return true;
@@ -120,11 +125,13 @@ public class HighScore extends JPanel {
 			return false;
 	}
 
-	/* Pre: true
+	/* Kontrollerar vilken plats poängen skall placeras på i listan.
+	 * 
+	 * Pre: true 
 	 * Post: Om score är större än något av score i highScoreModel
-	 * returneras index, annars returneras global variabel "MAX" */
+	 * returneras index, annars returneras global variabel "MAX"
+	 */
 	public int checkIndex(int score) {
-
 		for (int index = 0; index < MAX; index++) {
 			// Jämför det nya scoret med poängen i listan
 			if (score > highScoreModel.getElementAt(index).getScore()) {
@@ -133,13 +140,16 @@ public class HighScore extends JPanel {
 		}
 		return MAX;
 	}
-	
-	/* Pre: true
-	 * Post: Fyller highScoreModel med default värden */
+
+	/* skapar värden och fyller listan med startvärden.
+	 * 
+	 * Pre: true 
+	 * Post: Fyller highScoreModel med default värden
+	 */
 	public void setDefaultHighScoreModel() {
-		for(int i = 0; i < MAX; i++) {
+		for (int i = 0; i < MAX; i++) {
 			PlayerScore defaultPlayer;
-			defaultPlayer = new PlayerScore("...",  0);
+			defaultPlayer = new PlayerScore("...", 0);
 			highScoreModel.add(i, defaultPlayer);
 		}
 	}
@@ -147,7 +157,6 @@ public class HighScore extends JPanel {
 	public void saveToFile() {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
 			for (int i = 0; i < highScoreModel.size(); i++) {
-				System.out.println("test antal write:" + i);
 				PlayerScore playerScore = highScoreModel.getElementAt(i);
 				writer.write(playerScore.getInitials() + ":" + playerScore.getScore());
 				writer.newLine();
@@ -157,33 +166,39 @@ public class HighScore extends JPanel {
 		}
 
 	}
-	/* Pre: true
-	 * Post: Läser från filvägen "FILE_PATH",
-	 * finns ej filen skapas en ny fil med default-data */
+
+	/* Läser från fil
+	 * 
+	 * Pre: true 
+	 * Post: Läser från filvägen "FILE_PATH", finns ej filen skapas en ny
+	 * fil med default-data
+	 */
 	public void readFromFile() {
 		try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
 			String line;
 			highScoreModel.clear();
+			System.out.println("File found, reading from saved highscore-list");
+			int fetchCounter = 1;
 			while ((line = reader.readLine()) != null) {
-				System.out.println("Splittar");
 				String parts[] = line.split(":");
 				if (parts.length == 2) {
-					System.out.println("Läser");
 					String initials = parts[0];
 					int score = Integer.parseInt(parts[1]);
 					PlayerScore playerScore = new PlayerScore(initials, score);
 					highScoreModel.addElement(playerScore);
+					System.out.println("fetching: " + fetchCounter++ + ". " + initials  + " : " + score);
 				}
 			}
-		
-		} catch(FileNotFoundException e) {
+
+		} catch (FileNotFoundException e) {
 			setDefaultHighScoreModel();
 			saveToFile();
 			readFromFile();
-			
+			//e.printStackTrace();
+			System.out.println("File not found, creating new highscore-list.");
+
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		}
 	}
-
 }

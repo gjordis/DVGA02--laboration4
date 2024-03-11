@@ -44,7 +44,7 @@ public class Game {
 				Const.PADDLE_NAME);
 		ball.add(new Ball(Const.DEFAULT_VALUE, Const.DEFAULT_VALUE, Const.BALL_DIAMETER, Const.BALL_SPEED_X,
 				Const.BALL_SPEED_Y, true));
-		scoreTracker = new ScoreTracker( brickCollection, board, this);
+		scoreTracker = new ScoreTracker(this);
 		gameStateManager = new GameStateManager(this);
 
 		/* Skapar en panel för score och lägger in instanser av HighScore & LatestRuns */
@@ -100,6 +100,7 @@ public class Game {
 
 		}
 		manageBallBrickLogics(keyboard);
+		scoreTracker.updateScoreTracker(brickCollection.getScore());
 	}
 
 	public void draw(Graphics2D graphics) {
@@ -148,8 +149,6 @@ public class Game {
 		this.brickCollection = new BrickCollection(Const.BRICKCOLLECTION_START_X, Const.BRICKCOLLECTION_START_Y,
 				Const.BRICKCOLLECTION_WIDTH, Const.BRICKCOLLECTION_HEIGHT, Const.BRICKCOLLECTION_SPACING,
 				Const.GAMEAREA_WIDTH);
-		// skickar med den nya kollektionen till scoreboard för att kunna räkna poäng
-		scoreTracker.countScoreOn(brickCollection);
 		gameStateManager.setState(State.RUNNING);
 		highScoreDialogShown = false;
 		System.out.println("restart");
@@ -173,7 +172,7 @@ public class Game {
 
 			Ball b = iterator.next();
 			b.update(keyboard);
-			b.initiationPosition(paddle);
+			b.initiationPosition(paddle); // är bollen fast eller inte
 			b.hitWall(Const.GAMEAREA_WIDTH, board.getHeight());
 
 			/* boll träffar paddel */
@@ -182,7 +181,7 @@ public class Game {
 
 			/* Släpper bollen från paddel */
 			if (keyboard.isKeyDown(Key.Space) && b.getStartPosition())
-				b.setBallToPaddle(false);
+				b.setStartPosition(false);
 
 			/*
 			 * Kontrollerar om en bricka är träffad genom att använda logiken i hitByBall

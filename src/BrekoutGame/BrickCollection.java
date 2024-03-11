@@ -20,7 +20,6 @@ public class BrickCollection {
 		int currentX = x;
 		int currentY = y;
 		int maxRows = 5;
-		int invincibleBrickCount = 0;
 		Random random = new Random();
 		/* Skapar bricks, randomiserar vilka bricks som skapas 
 		 * genom ett random-objekt och en switch-case */
@@ -65,7 +64,7 @@ public class BrickCollection {
 	/* Kontroll om bollen träffar en bricka, vid träff returneras denna bricka.
 	 * Alla sidor på bollen kontrolleras mot brickans sidor. 
 	 * inktäktar bollen på brickan uppfylls if-satsen 
-	 * pre: anropas från Game.update()
+	 * pre: anrop från Game.update()
 	 * post: returnerar bricka vid träff, annars returnerar null*/
 	public ColoredBrick hitByBall(Ball ball) {
 		for (ColoredBrick brick : bricks) {
@@ -77,6 +76,7 @@ public class BrickCollection {
 				/* stannar bollen för att förhindra konstiga studsar med brickor */
 				ball.setY(ball.getY());
 				ball.setX(ball.getX());
+				// reverserar bollens riktning i Y-led
 				ball.reverseY();
 				return brick;
 			}

@@ -54,8 +54,9 @@ public class Ball extends Sprite {
 			setY(paddle.getY() - diameter);
 			// förbereder bollens nästa startbana & hastighet
 			Random random = new Random();
-			speedX = random.nextInt(- 20, 20);
+			speedX = random.nextInt(- 20, 20); // slumpar bollen X-hastighet för varierad start
 			speedY = 10;
+		// Annars rör sig bollen 
 		}else {
 			setX(getX() + speedX);
 			setY(getY() + speedY);
@@ -116,7 +117,7 @@ public class Ball extends Sprite {
 					speedX = (ballHitPoint - paddleCenter) / 6;
 					// System.out.println("ballHit: " + ballHit);
 					// System.out.println("paddleCenter: " + paddleCenter);
-					 System.out.println(speedX);
+					//System.out.println(speedX);
 				}
 			}
 		
@@ -150,7 +151,7 @@ public class Ball extends Sprite {
 		return startPosition;
 	}
 	
-	public void setBallToPaddle(boolean status) {
+	public void setStartPosition(boolean status) {
 		startPosition = status;
 	}
 
