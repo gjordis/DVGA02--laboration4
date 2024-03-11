@@ -4,10 +4,10 @@
  * Uppgift: Laboration2 - Breakoutspel */
 
 package BrekoutGame;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 
 public class ScoreTracker {
 	private int ballsLeft = 3, scoreCounter = 0;

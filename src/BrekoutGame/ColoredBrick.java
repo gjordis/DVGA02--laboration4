@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.geom.RoundRectangle2D;
 
 public class ColoredBrick extends Sprite {
 	private Color brickColor;

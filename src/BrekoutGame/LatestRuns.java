@@ -1,17 +1,14 @@
+/* Skapad av Jonas Schymberg
+ * Kurs: DVGA02
+ * VT - 24
+ * Uppgift: Laboration2 - Breakoutspel */
+
 package BrekoutGame;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;

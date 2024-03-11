@@ -4,8 +4,8 @@
  * Uppgift: Laboration2 - Breakoutspel */
 
 package BrekoutGame;
+
 import java.awt.Color;
-import java.awt.Graphics2D;
 
 public class DarkGrayBrick extends ColoredBrick {
 	/* Anropar super med:

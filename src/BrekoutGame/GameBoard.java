@@ -1,7 +1,7 @@
 package BrekoutGame;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 
 public class GameBoard extends JComponent {

@@ -1,12 +1,6 @@
 package BrekoutGame;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
+
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -32,7 +26,7 @@ public class Program extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		Program program = new Program();
+		new Program();
 	}
 
 }
