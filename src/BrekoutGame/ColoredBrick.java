@@ -38,11 +38,6 @@ public class ColoredBrick extends Sprite {
 		graphics.setColor(brickColor);
 		graphics.fillRect(getX(), getY(), getWidth(), getHeight());
 
-		/* Rundade hörn */
-		// RoundRectangle2D roundedRect = new RoundRectangle2D.Double(getX(), getY(),
-		// getWidth(), getHeight(), 8, 8);
-		// graphics.fill(roundedRect);
-
 		/* Ritar upp text inne i brick med antal hp kvar */
 		graphics.setColor(Color.BLACK);
 		graphics.setFont(new Font("Arial", Font.BOLD, Const.DEFAULT_FONTSIZE));

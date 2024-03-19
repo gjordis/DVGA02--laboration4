@@ -76,7 +76,7 @@ public class Game {
 		gameStateManager.manageWinLoss(keyboard);
 
 		/* Inga brickor kvar på planen */
-		if (brickCollection.checkVictory()) {
+		if (brickCollection.checkVictory() && gameStateManager.getState() != State.VICTORY) {
 			gameStateManager.setState(State.VICTORY);
 			ball.clear();
 			registerHighScore();

@@ -28,7 +28,7 @@ public class Const {
 	public static final int SCORETRACKER_LINE_END_Y = 450;
 	public static final int SCORETRACKER_FONTSIZE_SMALL = 30;
 	public static final int SCORETRACKER_FONTSIZE_MEDIUM = 40;
-	public static final int SCORETRACKER_FONTSIZE_LARGE = 80;
+	public static final int SCORETRACKER_FONTSIZE_LARGE = 50;
 	public static final int SCORETRACKER_BALLS_LEFT_X = 540;
 	public static final int SCORETRACKER_BALLS_LEFT_Y = 550;
 	public static final int SCORETRACKER_BALLS_LEFT_DIAMETER = 20;

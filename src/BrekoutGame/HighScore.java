@@ -165,7 +165,7 @@ public class HighScore extends JPanel {
 		try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
 			String line;
 			highScoreModel.clear();
-			System.out.println("File found, reading from saved highscore-list");
+			System.out.println("File found - reading from saved highscore-list");
 			int fetchCounter = 1;
 			while ((line = reader.readLine()) != null) {
 				String parts[] = line.split(":");
@@ -174,7 +174,7 @@ public class HighScore extends JPanel {
 					int score = Integer.parseInt(parts[1]);
 					PlayerScore playerScore = new PlayerScore(initials, score);
 					highScoreModel.addElement(playerScore);
-					System.out.println("fetching: " + fetchCounter++ + ". " + initials  + " : " + score);
+					System.out.println("fetching score " + fetchCounter++ + ". -> " + initials  + " : " + score);
 				}
 			}
 
